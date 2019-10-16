@@ -40,7 +40,7 @@ class LinkedList {
         }
     }
 
-    at(index) {
+    nodeAtIndex(index){
         if (index < 0 || index > this.length) {
             return null;
         }
@@ -50,11 +50,33 @@ class LinkedList {
             for (let c = 0; c < index; c++) {
                 curr_node = curr_node.next;                
             }
-            return curr_node.data;
+            return curr_node;
         }
     }
 
-    insertAt(index, data) {}
+    at(index) {
+        if (index < 0 || index > this.length) {
+            return null;
+        }
+        else{
+            return this.nodeAtIndex(index).data;
+        }
+    }
+
+    insertAt(index, data) {
+        let tmp = new LinkedList();
+        for (let i = 0; i < index; i++) {
+            tmp.append(this.at(i));
+        }
+        tmp.append(data);
+        for (let i = index; i < this.length; i++) {
+            tmp.append(this.at(i));
+        }
+        this.clear();
+        for (let i = 0; i < tmp.length; i++) {
+            this.append(tmp.at(i));
+        }
+    }
 
     isEmpty() {
         if (this.length == 0) {
@@ -69,25 +91,54 @@ class LinkedList {
         this.length = 0;
         this._head = null;
         this._tail = null;
+        return this;
     }
 
-    deleteAt(index) {}
+    deleteAt(index) {
+        if (this.isEmpty() != true) {
+            let tmp = new LinkedList();
+            for (let i = 0; i < this.length; i++) {
+                if (i != index) {
+                    tmp.append(this.at(i));
+                }
+            }
+            this.clear();
+            if (tmp.isEmpty() != true) {
+                for (let i = 0; i < tmp.length; i++) {
+                    this.append(tmp.at(i));
+                }      
+            }    
+        }
+        return this;
+    }
 
     reverse() {
-        let tmp = new LinkedList();
-        for (let i = 1; i <= this.length; i++) {
-            tmp.append(this.at(this.length-i));
-            
+        if (this.length > 1) {
+            let tmp = new LinkedList();
+            for (let i = 1; i <= this.length; i++) {
+                tmp.append(this.at(this.length-i));
+            }
+            this.clear();
+            for (let i = 0; i < tmp.length; i++) {
+                this.append(tmp.at(i));
+            }      
         }
-        console.log('HERE');
-        console.log(tmp.head());
-        console.log(tmp.tail());
-
-        //this = tmp;
+        return this;
     }
 
     indexOf(data) {
-
+        let result = null;
+        for (let i = 0; i < this.length; i++) {
+            if (this.nodeAtIndex(i).data == data) {
+                result = i;
+            }
+        }
+        if (result == null) {
+            return -1;
+        }
+        else{
+            return result;
+        }
     }
 }
 
